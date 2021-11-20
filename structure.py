@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from core import Substitution, occurs_dispatch, unify_dispatch
+from core import Substitution, occurs_dispatch, unify_dispatch, walk_dispatch
 
 
 class Structure(ABC):
@@ -11,6 +11,10 @@ class Structure(ABC):
     def unify(self, other: "Structure", s: Substitution) -> Substitution:
         """Unify this with another structure."""
 
+    @abstractmethod
+    def walk_star(self, s: Substitution) -> "Structure":
+        pass
+
 
 @unify_dispatch.register()
 def unify_structure(u: Structure, v: Structure, s):
@@ -20,3 +24,8 @@ def unify_structure(u: Structure, v: Structure, s):
 @occurs_dispatch.register
 def occurs_structure(v: Structure, x, s):
     return v.occurs(x, s)
+
+
+@walk_dispatch.register
+def walk_structure(v: Structure, s):
+    return v.walk_star(s)

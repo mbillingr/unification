@@ -32,9 +32,13 @@ class SpyStructure(Structure):
     def __init__(self):
         self.occurs_ = Mock()
         self.unify_ = Mock()
+        self.walk_ = Mock()
 
     def occurs(self, x, s):
         return self.occurs_(x, s)
 
     def unify(self, other, s):
         return self.unify_(other, s)
+
+    def walk_star(self, s):
+        return self.walk_(s)

@@ -14,7 +14,6 @@ def test_same_variable_occurs_in_itself():
 def test_variable_occurs_in_substitution():
     a = Var()
     b = Var()
-    c = Var()
     assert occurs(a, b, {b: a})
 
 

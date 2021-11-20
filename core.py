@@ -39,10 +39,20 @@ def unify(u: Term, v: Term, s: Substitution) -> Substitution:
 
 def walk(v: Term, s: Substitution) -> Term:
     """Recursively look up a term in the substitution."""
-    a = s.get(v)
-    if a:
+    try:
+        a = s[v]
+    except KeyError:
+        return v
+    except TypeError:
+        return v
+    else:
         return walk(a, s)
-    return v
+
+
+def walk_star(v: Term, s: Substitution) -> Term:
+    """Recursively look up a term and its subterms in the substitution."""
+    v = walk(v, s)
+    return walk_dispatch(v, s)
 
 
 def occurs(x: Term, v: Term, s: Substitution) -> bool:
@@ -75,6 +85,12 @@ unify_handlers = []
 def occurs_dispatch(_v: Term, _x: Term, _s: Substitution) -> bool:
     """Test if x occurs in v given s. Dispatches to the appropriate handler based on v's type."""
     return False
+
+
+@singledispatch
+def walk_dispatch(v: Term, _s: Substitution) -> bool:
+    """Test if x occurs in v given s. Dispatches to the appropriate handler based on v's type."""
+    return v
 
 
 def unifier(
