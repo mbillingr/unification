@@ -1,10 +1,12 @@
 from core import occurs_dispatch, unify_dispatch, extend_substitution
 from typing import Any
 
+from funny_id import hash_id
+
 
 class Var:
     def __repr__(self):
-        return f"<Var @ {hex(id(self) & 0xFFFFFF)[2:]}>"
+        return f"<{hash_id(id(self), separator='-')}>"
 
 
 @unify_dispatch.register(swap=True)
